@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Modelo de uso do MathJax (HTML+Latex)</title>
+
+  <!-- MATHJAX 3 (através da CDN) -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- MATHJAX 3 (salvo no computador) -->
+  <!-- <script type="text/javascript" async src="../../../Aplicativos/MathJax-master/es5/tex-mml-chtml.js" async></script> -->
+</head>
+<body>
+
+  <p>
+    <strong>Questão 1:</strong> 
+
+    <pre><code>
+        <strong>minFixDown(A, i):</strong>
+        <strong>while</strong> 2i ≤ A.heapSize
+        l = 2i
+        r = 2i+1
+        smallest = i
+        if l ≤ A.heapSize and A[l] < A[smallest] then
+          smallest = l
+        if r ≤ A.heapSize and A[r] &lt A[smallest] then
+          smallest = r
+        if smallest != i then
+          aux = A[i]
+          A[i] = A[smallest]
+          A[smallest] = aux
+          i = smallest
+        else
+          break
+      </code>
+
+      <code>
+        <strong>minMoveUp(A, i):</strong>
+        <strong>while</strong> 2i ≤ A.heapSiz
+        p = i/2
+         while p >= 1 and A[i] < A[p]
+         aux = A[i]
+         A[i] = A[p]
+         A[p] = aux
+         i = p
+         p = p/2
+      </code>
+    
+      <code>
+      <strong>minHeap-increaseKey(A, i, newKey)</strong>
+        if newKey < A[i] then
+         error “invalid key”
+        A[i] = newKey
+        minFixDown(A, i)
+      </code>
+
+      <code>
+      <strong>minHeap-DecreaseKey(A, i, newKey)</strong>
+        if newKey > A[i] then
+        error “invalid key”
+        A[i] = newKey
+        minMoveUp(A,i)
+      </code>
+    
+      <code><strong>minHeapInsert(A, newKey)</strong>
+         if A.heapSize >= A.length then
+          error “heap overflow”
+         A.heapSize = A.heapSize + 1
+         A[A.heapSize] = newKey
+         maxMoveUp(A, A.heapSize)
+      </code>
+
+      <code><strong>minHeap-extractMin(A)</strong>
+         if A.heapSize < 1 then
+          error “heap underflow”
+         dados = A[1]
+         A[1] = A[A.heapSize] 
+         A.heapSize = A.heapSize - 1
+         minFixDown(A, 1)
+         return dados
+        </code>
+    
+    </pre>
+  </p>
+    
+  
+  <p>
+    <strong>Questão 2:</strong> 
+
+    <pre>
+      <code>
+        <strong>Heap-Delete(A, i) </strong>
+        if i < 0 or i >= A.heapSize then
+          error "indíce inválido"
+        A[i] = A[A.heapSize]
+        A.heapSize --
+        maxFixDown(A, i)
+      </code>
+    </pre>
+  </p>
+
+  <p>
+    <strong>Questão 3:</strong> Um heap \(d\)-ário é semelhante a um heap binário, 
+    mas (com uma única exceção possível) nós que não são folhas têm \(d\) filhos em vez de dois filhos.
+    <ol type="a">
+      <li>
+        <p>Como o heap ainda será máximo, preservaremos a propriedade de A[[i/2]] >= A[i] para 2 <= i <= n <br> 
+        A diferença reside no fato de que agora que o número de filhos não está limitado a dois, mas sim a d. <br>
+        Deste modo, sabemos que os filhos 2i e 2i+1, esquerdos e direitos respectivamente, não serão mais as únicas opções. Podendo agora extender o acesso a filhos de i com a sequência de <br>
+        (d*i) + 1, (d*i) +2, ..., (d*i) + d. Sendo d um inteiro >= 1<br>
+        Para verificarmos isso, tenhamos como base o caso de um heap 1-nário. Verifica-se que 1*i + 1 acessa seu único filho, já que o próximo elemento será i +1. <br>
+        Com isso suponha um heap k-nário qualquer, com k >= 1. Se a propriedade é válida para d=k, então ela deverá valer para d= k+1. <br>
+        O que é verdade, já que (k+1)i + (k+1), respeita a propriedade do pai para os filhos, já que um heap k+1 nário de fato possuirá uma notação de (k+1)i + (k+1) para seus filhos.</p>
+      </li>
+      <li>
+        <p>\(\log_d n\).</p>
+      </li>
+      <li>
+        <pre>
+          <code>
+            Extract-Max(A, i, d)
+              if A.heapSize < 1 then
+                error “heap underflow”
+              dados = A[1]
+              A[1] = A[A.heapSize] 
+              A.heapSize = A.heapSize - 1
+              MaxFixDown(A, 1, k)
+              return dados
+          </code>
+        </pre>
+        <p> Envia-se o d para que possa ser possível posteriormente no MaxFixDown substituir adequadamente o acesso aos filhos. Como essa função é chamada, o tempo de acesso torna-se <br>
+        \( n\log_d n\) já que no pior caso irá ser percorrido até o fim do vetor caso o vetor já estivesse ordenado previamente, uma vez que é pego o valor do último filho.</p>
+      </li>
+    </ol>
+  </p>
+  
+</body>
+</html>

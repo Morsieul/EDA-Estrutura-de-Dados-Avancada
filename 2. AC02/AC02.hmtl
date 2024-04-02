@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pseudocódigo com LaTeX</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <!-- Use MathJax para renderização -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <!-- Seu código LaTeX aqui -->
+    $$\documentclass{article}
+    \usepackage{amsmath}
+    \usepackage{algorithm}
+    \usepackage{algorithmic}
+
+    \begin{document}
+
+    \begin{algorithm}
+    \caption{Algoritmo Exemplo}
+    \begin{algorithmic}[1]
+        \STATE \textbf{Entrada:} Vetor $A[1..n]$ de inteiros.
+        \STATE \textbf{Saída:} Soma dos elementos de $A$.
+        \STATE
+        \STATE $soma \leftarrow 0$
+        \FOR{$i \leftarrow 1$ até $n$}
+            \STATE $soma \leftarrow soma + A[i]$
+        \ENDFOR
+        \STATE
+        \RETURN $soma$
+    \end{algorithmic}
+    \end{algorithm}
+
+    \end{document}$$
+</body>
+</html>
