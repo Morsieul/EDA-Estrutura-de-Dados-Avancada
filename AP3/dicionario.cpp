@@ -3,6 +3,7 @@
 #include "avltree.cpp"
 
 int main() {
+    DicionarioAVL* dic = new DicionarioAVL();
     std::vector<std::string> words = {"ação", "criança", "maçã", "força"};
     boost::locale::generator gen;
     std::locale loc = gen("pt_BR.UTF-8");

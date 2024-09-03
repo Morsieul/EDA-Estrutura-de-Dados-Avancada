@@ -15,13 +15,13 @@ class DicionarioAVL {
     node * doubleRightRotation(node* p);
     node * singleLeftRotation ( node * p ) ;
     node * doubleLeftRotation(node * p);
-    node * add ( node *p , std::string key ) ;
-    node * remove(node * p, int key);
-    node * newNode(int x);
-    node * fixup_node ( node *p , int key );
-    node *  search(node * p, int x);
-    node * successor(node * p, int x);
-    node * predecessor(node * p, int x);
+    node * add ( node *p , const std::string& key ) ;
+    node * remove(node * p, const std::string& key);
+    node * newNode(const std::string& x);
+    node * fixup_node ( node *p , const std::string& key );
+    node * search(node * p, const std::string& x);
+    node * successor(node * p, const std::string& x);
+    node * predecessor(node * p, const std::string& x);
 
 public:
 
@@ -37,11 +37,11 @@ public:
 
     void Destructor();
 
-    void Insert(std::string& x);
+    void Insert(const std::string& x);
 
-    void Erase(int x);
+    void Erase(const std::string& x);
 
-    bool Contains(int x);
+    bool Contains(const std::string& x);
 
     void Clear();
 
@@ -49,9 +49,9 @@ public:
 
     void Maximum();
 
-    void Successor(int x);
+    void Successor(const std::string& x);
 
-    void Predecessor(int x);
+    void Predecessor( const std::string& x);
 
     void Empty();
 
