@@ -1,7 +1,6 @@
-#include <iostream>
 #include <vector>
-#include "avltree.cpp"
 #include <boost/locale.hpp>
+#include "avltree.cpp"
 
 int main() {
     std::vector<std::string> words = {"ação", "criança", "maçã", "força"};

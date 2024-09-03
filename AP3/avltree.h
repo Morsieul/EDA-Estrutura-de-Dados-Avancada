@@ -15,7 +15,7 @@ class DicionarioAVL {
     node * doubleRightRotation(node* p);
     node * singleLeftRotation ( node * p ) ;
     node * doubleLeftRotation(node * p);
-    node * add ( node *p , int key ) ;
+    node * add ( node *p , std::string key ) ;
     node * remove(node * p, int key);
     node * newNode(int x);
     node * fixup_node ( node *p , int key );
@@ -37,7 +37,7 @@ public:
 
     void Destructor();
 
-    void Insert(int x);
+    void Insert(std::string& x);
 
     void Erase(int x);
 

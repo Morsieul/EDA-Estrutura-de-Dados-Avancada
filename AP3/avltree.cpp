@@ -34,7 +34,7 @@ int size(node * p) {
     return 1 + size(p->left) + size(p->right);
 }
 
-node * Set::singleRightRotation(node* p) {
+node * DicionarioAVL::singleRightRotation(node* p) {
 	if (p == nullptr || p->left == nullptr) return p;
 	node * u = p->left;
 	node * T2 = u->right;
@@ -51,13 +51,13 @@ node * Set::singleRightRotation(node* p) {
 
 }
 
-node * Set::doubleRightRotation(node* p) {
+node * DicionarioAVL::doubleRightRotation(node* p) {
 	    p->left = singleLeftRotation(p->left);
         return singleRightRotation(p);
 
 }
 
-node * Set::singleLeftRotation(node * p) {
+node * DicionarioAVL::singleLeftRotation(node * p) {
 	node* u = p->right;
     node * T2 = u->left;
 
@@ -69,12 +69,12 @@ node * Set::singleLeftRotation(node * p) {
         return u;
 }
 
-node * Set::doubleLeftRotation(node * p) {
+node * DicionarioAVL::doubleLeftRotation(node * p) {
 	    p->right = singleRightRotation(p->right);
         return singleLeftRotation(p);
 }
 
-node * Set::newNode(int x) {
+node * DicionarioAVL::newNode(int x) {
 
 	node * no = new node();
 	no->data = x;
@@ -105,7 +105,7 @@ node* findMax(node* t) {
 }
 
 
-node* Set::add(node* p, int x) {
+node* DicionarioAVL::add(node* p, std::string x) {
 
 	if (p == nullptr) {
         std::cout << "Adding new node: " << x << std::endl;
@@ -139,7 +139,7 @@ node* Set::add(node* p, int x) {
 
 }
 
-node * Set::remove(node * p, int x) {
+node * DicionarioAVL::remove(node * p, int x) {
 	node * temp = nullptr;
 
 	if(p == nullptr) return nullptr;
@@ -180,7 +180,7 @@ node * Set::remove(node * p, int x) {
 	
 }
 
-node * Set::search(node * p, int x) {
+node * DicionarioAVL::search(node * p, int x) {
 
 	if( p == nullptr || p->data == x) return p;
 
@@ -202,7 +202,7 @@ bool contains(node * root, int x) {
     return false;
 }
 
-node * Set::successor(node * p, int x) {
+node * DicionarioAVL::successor(node * p, int x) {
 	node * no = search(p, x);
     if (no == nullptr) {
         throw std::runtime_error("Node not found");
@@ -230,7 +230,7 @@ node * Set::successor(node * p, int x) {
     return succ;
 }
 
-node * Set::predecessor(node * p, int x) {
+node * DicionarioAVL::predecessor(node * p, int x) {
 	 node* no = search(p, x);
         if (no == nullptr) {
             throw std::runtime_error("Node not found");
@@ -270,44 +270,38 @@ void inorder(node * p) {
 
 // Funções de chamada pública
 
-node* Set::Head() {
+node* DicionarioAVL::Head() {
 	return this->root;
 }
 
-void Set::Insert(std::string& x) {
+void DicionarioAVL::Insert(std::string& x) {
 	root = add(root, x);
 	
 }
 
-void Set::Erase(int x) {
+void DicionarioAVL::Erase(int x) {
 	remove(root, x);
 }
 
-bool Set::Contains(int x) {
+bool DicionarioAVL::Contains(int x) {
     return contains(root, x);
 }
 
-void Set::Clear() {
+void DicionarioAVL::Clear() {
 	makeEmpty(root);
 }
 
-void Set::Swap(Set& t) {
-	node * aux = this->root;
-	this->root= t.root;
-	t.root = aux;
-}
-
-void Set::Minimum() {
+void DicionarioAVL::Minimum() {
 	node* t = findMin(root);
 	std::cout << t->data << std::endl;
 }
 
-void Set::Maximum() {
+void DicionarioAVL::Maximum() {
 	node* t = findMax(root);
 	std::cout << t->data << std::endl;
 }
 
-void Set::Successor(int x) {
+void DicionarioAVL::Successor(int x) {
 	try {
 			node * p = successor(root, x);
 			std::cout << p->data << std::endl;
@@ -316,7 +310,7 @@ void Set::Successor(int x) {
 	}
 }
 
-void Set::Predecessor(int x) {
+void DicionarioAVL::Predecessor(int x) {
 	try {
 		node * p = predecessor(root, x);
 		std::cout << p->data << std::endl;
@@ -325,13 +319,13 @@ void Set::Predecessor(int x) {
 	}
 }
 
-void Set::Empty() {
+void DicionarioAVL::Empty() {
 	isEmpty(root) ? std::cout << "Sim\n" << std::endl : std::cout << "Nao\n" << std::endl;
 }
-int Set::Size() {
+int DicionarioAVL::Size() {
 	return size(root);
 }
-void Set::Show() {
+void DicionarioAVL::Show() {
 	inorder(root);
 	std::cout << std::endl;
 }
