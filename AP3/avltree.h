@@ -4,7 +4,7 @@
 #define SET_H
 #include "node.h"
 
-class Set {
+class DicionarioAVL {
     
     node* root;
 
@@ -25,9 +25,9 @@ class Set {
 
 public:
 
-    Set() : root(nullptr) {}
+    DicionarioAVL() : root(nullptr) {}
 
-    ~Set() {
+    ~DicionarioAVL() {
         Clear();
     }
 

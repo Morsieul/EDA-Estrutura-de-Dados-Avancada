@@ -4,7 +4,7 @@
 struct node {
     public:
     std::string data;
-    int aparcoes;
+    int contagem;
     int height;
     node* left{nullptr};
     node* right{nullptr};

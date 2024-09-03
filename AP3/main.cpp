@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include "avltree.cpp"
 #include <boost/locale.hpp>
 
 int main() {
