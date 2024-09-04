@@ -43,6 +43,7 @@ int main() {
 
     file.close();
 
+    dic->Show();
     // Opcional: Exibir as palavras inseridas ou outras operações
     // Por exemplo, dic->Print(); se você tiver um método para isso
 

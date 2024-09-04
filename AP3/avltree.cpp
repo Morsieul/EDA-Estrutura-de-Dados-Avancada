@@ -108,7 +108,7 @@ node* findMax(node* t) {
 node* DicionarioAVL::add(node* p, const std::string& x) {
 
 	if (p == nullptr) {
-        std::cout << "Adding new node: " << x << std::endl;
+        //std::cout << "Adding new node: " << x << std::endl;
         return newNode(x);
     }
 
@@ -119,7 +119,7 @@ node* DicionarioAVL::add(node* p, const std::string& x) {
         // std::cout << "Going right from " << p->data << " to add " << x << std::endl;
         p->right = add(p->right, x);
     } else {
-        // p->contagem ++;
+        p->contagem ++;
         return p;
     }
 
@@ -263,7 +263,7 @@ void inorder(node * p) {
    if (p != nullptr) {
         inorder(p->left);
         // std::cout << "Visiting node with data: " << p->data << std::endl;
-        std::cout << p->data << std::endl;
+        std::cout << p->data <<  " [" << p->contagem << "]" << std::endl;
         inorder(p->right);
     } else return;
 }
