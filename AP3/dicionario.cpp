@@ -3,7 +3,6 @@
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
-// Inclua o cabeçalho da sua classe DicionarioAVL
 #include "avltree.cpp"
 #include "redblacktree.cpp"
 
