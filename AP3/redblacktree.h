@@ -24,17 +24,35 @@ class DicionarioRBT {
 
     RBNode* buscar(RBNode* n, S& x){}
 
+    void fixDelete(RBNode* n) {}
+
+    void fixInsert(RBNode* n) {}
+
+    void RightRotate(RBNode* n) {}
+
+    void LeftRotate(RBNode* n) {}
+
+    void DoubleRightRotate(RBNode* n) {}
+
+    void DoubleLeftRotate(RBNode* n) {}
+
+    void add(RBNode* n, S& x) {}
+
     void inorder(RBNode* r) {}
-    
+
     public:
 
-    void Show() {}
+    DicionarioRBT() {}
 
+    ~DicionarioRBT() {}
+    
     void Search(S& x) {}
 
     void Insert(S& x) {}
 
     void Remove(S& x) {}
+
+    void Show() {}
 
 };
 
