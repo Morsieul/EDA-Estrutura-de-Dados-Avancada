@@ -5,6 +5,7 @@
 #include <boost/tokenizer.hpp>
 // Inclua o cabeçalho da sua classe DicionarioAVL
 #include "avltree.cpp"
+#include "redblacktree.cpp"
 
 int main() {
     // Inicializa o dicionário AVL
