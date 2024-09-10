@@ -52,14 +52,17 @@ class DicionarioRBT {
     
     void Search(S& x) {}
 
-    void Insert(S& x) {}
+    void Insert(S& x) {
+        add(root, x);
+    }
 
     void Remove(S& x) {}
 
-    void Show() {}
+    void Show() {
+        inorder(root);
+    }
 
 
 };
 
-#include "RedBlackTree.tpp"
 #endif
