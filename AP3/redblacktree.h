@@ -1,45 +1,49 @@
 #pragma once
 
-#ifdef REDBLACK_H
+#ifndef REDBLACK_H
 #define REDBLACK_H
-
-#include "note.h"
-
-temmplate<typename S>
 
 enum Color { RED, BLACK };
 
-class RBnode : public Node {
-    Color color;
-    RBnode* parent;
-
+template<typename S>
+struct RBNode {
     public:
-    RBNode(T val) : Node<T>(val), color(RED), parent(nullptr) {}
+    Color color;
+    RBNode* parent;
+    S data;
+    int contagem = 1;
+    int height;
+    RBNode* left{nullptr};
+    RBNode* right{nullptr};
+
+    
+    RBNode(S val) : data(val), color(RED), parent(nullptr), left(nullptr), right(nullptr) {}
 };
 
-
+template<typename S>
 class DicionarioRBT {
-    RBNode* root;
+    RBNode<S>* root;
 
 
-    RBNode* buscar(RBNode* n, S& x){}
+    RBNode<S>* buscar(RBNode<S>* n, S& x){}
 
-    void fixDelete(RBNode* n) {}
+    void fixDelete(RBNode<S>* n) {}
 
-    void fixInsert(RBNode* n) {}
+    void fixInsert(RBNode<S>* n) {}
 
-    void RightRotate(RBNode* n) {}
+    void RightRotate(RBNode<S>* n) {}
 
-    void LeftRotate(RBNode* n) {}
+    void LeftRotate(RBNode<S>* n) {}
 
-    void DoubleRightRotate(RBNode* n) {}
+    void DoubleRightRotate(RBNode<S>* n) {}
 
-    void DoubleLeftRotate(RBNode* n) {}
+    void DoubleLeftRotate(RBNode<S>* n) {}
 
-    void add(RBNode* n, S& x) {}
+    void add(RBNode<S>* n, S& x) {}
 
-    void inorder(RBNode* r) {}
-
+    void inorder(RBNode<S>* r) {}
+    
+    //Metodos publicos:
     public:
 
     DicionarioRBT() {}
