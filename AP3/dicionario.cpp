@@ -4,7 +4,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
 #include "avltree.cpp"
-#include "redblacktree.cpp"
+#include "redblacktree.h"
 
 int main() {
     // Inicializa o dicionário AVL

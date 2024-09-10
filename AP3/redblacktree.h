@@ -58,7 +58,8 @@ class DicionarioRBT {
 
     void Show() {}
 
+
 };
 
-
+#include "RedBlackTree.tpp"
 #endif
