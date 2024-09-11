@@ -23,7 +23,7 @@ struct RBNode {
 template<typename S>
 class DicionarioRBT {
     RBNode<S>* root;
-
+    RBNode<S>* NIL;
 
     RBNode<S>* buscar(RBNode<S>* n, S& x){}
 
@@ -31,9 +31,29 @@ class DicionarioRBT {
 
     void fixInsert(RBNode<S>* n) {}
 
-    void RightRotate(RBNode<S>* n) {}
+    void RightRotate(RBNode<S>* x) {
+        RBNode<S>* y = x->left;
+        x->left = y->right;
+        if (y->right != NIL) y->right->parent = x;
+        y->parent = x->parent;
+        if (x->parent == nullptr)  root = y;
+        else if (x == x->parent->right) x->parent->right = y;
+        else x->parent->left = y;
+        y->right = x;
+        x->parent = y;
+    }
 
-    void LeftRotate(RBNode<S>* n) {}
+    void LeftRotate(RBNode<S>* x) {
+        RBNode<S>* y = x->right;
+        x->right = y->left;
+        if (y->left != NIL) y->left->parent = x;
+        y->parent = x->parent;
+        if (x->parent == nullptr) root = y;
+        else if (x == x->parent->left) x->parent->left = y;
+        else x->parent->right = y;
+        y->left = x;
+        x->parent = y;
+    }
 
     void DoubleRightRotate(RBNode<S>* n) {}
 
@@ -41,27 +61,39 @@ class DicionarioRBT {
 
     void add(RBNode<S>* n, S& x) {}
 
+    void remove(RBNode<S>* n, S& x) {
+
+    }
+
     void inorder(RBNode<S>* r) {}
     
     //Metodos publicos:
     public:
 
-    DicionarioRBT() {}
+    DicionarioRBT() {
+        NIL = new RBNode<S>*();
+        NIL->color = "BLACK";
+        NIL->left = NIL->right = NIL;
+        root = NIL;
+    }
 
     ~DicionarioRBT() {}
     
-    void Search(S& x) {}
+    void Search(S& x) {
+        buscar(root, x);
+    }
 
     void Insert(S& x) {
         add(root, x);
     }
 
-    void Remove(S& x) {}
+    void Remove(S& x) {
+        remove(root, x);
+    }
 
     void Show() {
         inorder(root);
     }
-
 
 };
 
