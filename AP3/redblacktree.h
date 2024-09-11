@@ -25,11 +25,56 @@ class DicionarioRBT {
     RBNode<S>* root;
     RBNode<S>* NIL;
 
-    RBNode<S>* buscar(RBNode<S>* n, S& x){}
+    RBNode<S>* buscar(RBNode<S>* p, S& x) {
+    if( p == nullptr || p->data == x) return p;
+
+	else if( p -> data > x) return search(p->left, x);
+	else return search(p->right, x);
+    }
 
     void fixDelete(RBNode<S>* n) {}
 
-    void fixInsert(RBNode<S>* n) {}
+    void fixInsert(RBNode<S>* k) {
+        while (k != root && k->parent->color == "RED") {
+            if (k->parent == k->parent->parent->left) {
+               RBNode<S>* u = k->parent->parent->right; // uncle
+                if (u->color == "RED") {
+                    k->parent->color = "BLACK";
+                    u->color = "BLACK";
+                    k->parent->parent->color = "RED";
+                    k = k->parent->parent;
+                }
+                else {
+                    if (k == k->parent->right) {
+                        k = k->parent;
+                        leftRotate(k);
+                    }
+                    k->parent->color = "BLACK";
+                    k->parent->parent->color = "RED";
+                    rightRotate(k->parent->parent);
+                }
+            }
+            else {
+                RBNode<S>* u = k->parent->parent->left; // uncle
+                if (u->color == "RED") {
+                    k->parent->color = "BLACK";
+                    u->color = "BLACK";
+                    k->parent->parent->color = "RED";
+                    k = k->parent->parent;
+                }
+                else {
+                    if (k == k->parent->left) {
+                        k = k->parent;
+                        rightRotate(k);
+                    }
+                    k->parent->color = "BLACK";
+                    k->parent->parent->color = "RED";
+                    leftRotate(k->parent->parent);
+                }
+            }
+        }
+        root->color = "BLACK";
+    }
 
     void RightRotate(RBNode<S>* x) {
         RBNode<S>* y = x->left;
@@ -55,17 +100,61 @@ class DicionarioRBT {
         x->parent = y;
     }
 
-    void DoubleRightRotate(RBNode<S>* n) {}
+    void add(RBNode<S>* n, S& x) {
+        RBNode<S>* new_node = new RBNode<S>*(x);
+        new_node->left = NIL;
+        new_node->right = NIL;
 
-    void DoubleLeftRotate(RBNode<S>* n) {}
+        RBNode<S>* parent = nullptr;
+        RBNode<S>* current = n;
 
-    void add(RBNode<S>* n, S& x) {}
+        // BST insert
+        while (current != NIL) {
+            parent = current;
+            if(current->data == new_node->data) {
+                current->contagem++;
+                return;
+            }
+            else if (new_node->data < current->data) current = current->left;
+            else current = current->right;
+        }
+
+        new_node->parent = parent;
+
+        if (parent == nullptr) {
+            root = new_node;
+        }
+        else if (new_node->data < parent->data) {
+            parent->left = new_node;
+        }
+        else {
+            parent->right = new_node;
+        }
+
+        if (new_node->parent == nullptr) {
+            new_node->color = "BLACK";
+            return;
+        }
+
+        if (new_node->parent->parent == nullptr) {
+            return;
+        }
+
+        fixInsert(new_node);
+    }
 
     void remove(RBNode<S>* n, S& x) {
 
     }
 
-    void inorder(RBNode<S>* r) {}
+    void inorder(RBNode<S>* p) {
+        if (p != nullptr) {
+        inorder(p->left);
+        // std::cout << "Visiting node with data: " << p->data << std::endl;
+        std::cout << p->data <<  " [" << p->contagem << "]" << std::endl;
+        inorder(p->right);
+    } else return;
+    }
     
     //Metodos publicos:
     public:
