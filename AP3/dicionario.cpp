@@ -7,8 +7,11 @@
 #include "redblacktree.h"
 
 int main() {
-    // Inicializa o dicionário AVL
-    DicionarioAVL* dic = new DicionarioAVL();
+    // Inicializa o dicionário AVL (se ainda for necessário)
+    DicionarioAVL* dic_avl = new DicionarioAVL();
+
+    // Inicializa o dicionário Rubro-Negro para strings
+    DicionarioRBT<std::string>* dic_rbt = new DicionarioRBT<std::string>();
 
     // Abre o arquivo
     std::ifstream file("dicionario.txt");
@@ -33,22 +36,21 @@ int main() {
             boost::algorithm::to_lower(palavra_processada);
 
             // Opcional: Remover pontuação residual, exceto hífens
-            // Por exemplo, se houver apóstrofos ou outros caracteres
             boost::algorithm::trim_if(palavra_processada, boost::is_any_of("!\"#$%&'()*+,./:;<=>?@[\\]^_`{|}~"));
 
-            // Insere a palavra na árvore AVL
-            dic->Insert(palavra_processada);
+            // Insere a palavra na árvore Rubro-Negra
+            dic_rbt->Insert(palavra_processada);
         }
     }
 
     file.close();
 
-    dic->Show();
-    // Opcional: Exibir as palavras inseridas ou outras operações
-    // Por exemplo, dic->Print(); se você tiver um método para isso
+    // Exibe as palavras inseridas na árvore Rubro-Negra
+    dic_rbt->Show();
 
-    // Libera a memória alocada para o dicionário
-    delete dic;
+    // Libera a memória alocada para o dicionário AVL e Rubro-Negro
+    delete dic_avl;
+    //delete dic_rbt;
 
     return 0;
 }

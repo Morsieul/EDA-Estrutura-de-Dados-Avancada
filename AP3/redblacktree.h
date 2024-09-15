@@ -26,54 +26,54 @@ class DicionarioRBT {
     RBNode<S>* NIL;
 
     RBNode<S>* buscar(RBNode<S>* p, S& x) {
-    if( p == nullptr || p->data == x) return p;
+    if( p == NIL || p->data == x) return p;
 
-	else if( p -> data > x) return search(p->left, x);
-	else return search(p->right, x);
+	else if( p -> data > x) return buscar(p->left, x);
+	else return buscar(p->right, x);
     }
 
     void fixDelete(RBNode<S>* n) {}
 
     void fixInsert(RBNode<S>* k) {
-        while (k != root && k->parent->color == "RED") {
+        while (k != root && k->parent->color == RED) {
             if (k->parent == k->parent->parent->left) {
                RBNode<S>* u = k->parent->parent->right; // uncle
-                if (u->color == "RED") {
-                    k->parent->color = "BLACK";
-                    u->color = "BLACK";
-                    k->parent->parent->color = "RED";
+                if (u->color == RED) {
+                    k->parent->color = BLACK;
+                    u->color = BLACK;
+                    k->parent->parent->color = RED;
                     k = k->parent->parent;
                 }
                 else {
                     if (k == k->parent->right) {
                         k = k->parent;
-                        leftRotate(k);
+                        LeftRotate(k);
                     }
-                    k->parent->color = "BLACK";
-                    k->parent->parent->color = "RED";
-                    rightRotate(k->parent->parent);
+                    k->parent->color = BLACK;
+                    k->parent->parent->color = RED;
+                    RightRotate(k->parent->parent);
                 }
             }
             else {
                 RBNode<S>* u = k->parent->parent->left; // uncle
-                if (u->color == "RED") {
-                    k->parent->color = "BLACK";
-                    u->color = "BLACK";
-                    k->parent->parent->color = "RED";
+                if (u->color == RED) {
+                    k->parent->color = BLACK;
+                    u->color = BLACK;
+                    k->parent->parent->color = RED;
                     k = k->parent->parent;
                 }
                 else {
                     if (k == k->parent->left) {
                         k = k->parent;
-                        rightRotate(k);
+                        RightRotate(k);
                     }
-                    k->parent->color = "BLACK";
-                    k->parent->parent->color = "RED";
-                    leftRotate(k->parent->parent);
+                    k->parent->color = BLACK;
+                    k->parent->parent->color = RED;
+                    LeftRotate(k->parent->parent);
                 }
             }
         }
-        root->color = "BLACK";
+        root->color = BLACK;
     }
 
     void RightRotate(RBNode<S>* x) {
@@ -81,7 +81,7 @@ class DicionarioRBT {
         x->left = y->right;
         if (y->right != NIL) y->right->parent = x;
         y->parent = x->parent;
-        if (x->parent == nullptr)  root = y;
+        if (x->parent == NIL)  root = y;
         else if (x == x->parent->right) x->parent->right = y;
         else x->parent->left = y;
         y->right = x;
@@ -93,7 +93,7 @@ class DicionarioRBT {
         x->right = y->left;
         if (y->left != NIL) y->left->parent = x;
         y->parent = x->parent;
-        if (x->parent == nullptr) root = y;
+        if (x->parent == NIL) root = y;
         else if (x == x->parent->left) x->parent->left = y;
         else x->parent->right = y;
         y->left = x;
@@ -101,11 +101,11 @@ class DicionarioRBT {
     }
 
     void add(RBNode<S>* n, S& x) {
-        RBNode<S>* new_node = new RBNode<S>*(x);
+        RBNode<S>* new_node = new RBNode<S>(x);
         new_node->left = NIL;
         new_node->right = NIL;
 
-        RBNode<S>* parent = nullptr;
+        RBNode<S>* parent = NIL;
         RBNode<S>* current = n;
 
         // BST insert
@@ -121,7 +121,7 @@ class DicionarioRBT {
 
         new_node->parent = parent;
 
-        if (parent == nullptr) {
+        if (parent == NIL) {
             root = new_node;
         }
         else if (new_node->data < parent->data) {
@@ -131,12 +131,12 @@ class DicionarioRBT {
             parent->right = new_node;
         }
 
-        if (new_node->parent == nullptr) {
-            new_node->color = "BLACK";
+        if (new_node->parent == NIL) {
+            new_node->color = BLACK;
             return;
         }
 
-        if (new_node->parent->parent == nullptr) {
+        if (new_node->parent->parent == NIL) {
             return;
         }
 
@@ -148,7 +148,7 @@ class DicionarioRBT {
     }
 
     void inorder(RBNode<S>* p) {
-        if (p != nullptr) {
+        if (p != NIL) {
         inorder(p->left);
         // std::cout << "Visiting node with data: " << p->data << std::endl;
         std::cout << p->data <<  " [" << p->contagem << "]" << std::endl;
@@ -160,8 +160,8 @@ class DicionarioRBT {
     public:
 
     DicionarioRBT() {
-        NIL = new RBNode<S>*();
-        NIL->color = "BLACK";
+        NIL = new RBNode<S>(S()); // Inicializa NIL com um valor padrão de S
+        NIL->color = BLACK;
         NIL->left = NIL->right = NIL;
         root = NIL;
     }
