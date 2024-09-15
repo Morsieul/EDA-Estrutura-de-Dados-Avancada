@@ -50,7 +50,7 @@ int main() {
 
     // Libera a memória alocada para o dicionário AVL e Rubro-Negro
     delete dic_avl;
-    //delete dic_rbt;
+    delete dic_rbt;
 
     return 0;
 }

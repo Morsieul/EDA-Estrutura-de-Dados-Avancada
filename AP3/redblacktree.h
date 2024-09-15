@@ -26,13 +26,82 @@ class DicionarioRBT {
     RBNode<S>* NIL;
 
     RBNode<S>* buscar(RBNode<S>* p, S& x) {
-    if( p == NIL || p->data == x) return p;
+        if( p == NIL || p->data == x) return p;
 
-	else if( p -> data > x) return buscar(p->left, x);
-	else return buscar(p->right, x);
+        else if( p -> data > x) return buscar(p->left, x);
+        else return buscar(p->right, x);
     }
 
-    void fixDelete(RBNode<S>* n) {}
+    void fixDelete(RBNode<S>* x) {
+        RBNode<S>* s;
+        while (x != root && x->color == BLACK) {
+        if (x == x->parent->left) {
+            s = x->parent->right;
+            if (s->color == RED) {
+            s->color = BLACK;
+            x->parent->color = RED;
+            leftRotate(x->parent);
+            s = x->parent->right;
+            }
+
+            if (s->left->color == BLACK && s->right->color == BLACK) {
+            s->color = RED;
+            x = x->parent;
+            } else {
+            if (s->right->color == BLACK) {
+                s->left->color = BLACK;
+                s->color = RED;
+                RightRotate(s);
+                s = x->parent->right;
+            }
+
+            s->color = x->parent->color;
+            x->parent->color = BLACK;
+            s->right->color = BLACK;
+            LeftRotate(x->parent);
+            x = root;
+            }
+        } else {
+            s = x->parent->left;
+            if (s->color == RED) {
+            s->color = BLACK;
+            x->parent->color = RED;
+            RightRotate(x->parent);
+            s = x->parent->left;
+            }
+
+            if (s->right->color == BLACK && s->right->color == BLACK) {
+            s->color = RED;
+            x = x->parent;
+            } else {
+            if (s->left->color == BLACK) {
+                s->right->color = BLACK;
+                s->color = RED;
+                LeftRotate(s);
+                s = x->parent->left;
+            }
+
+            s->color = x->parent->color;
+            x->parent->color = BLACK;
+            s->left->color = BLACK;
+            RightRotate(x->parent);
+            x = root;
+            }
+        }
+        }
+        x->color = BLACK;
+    }
+
+    void rbTransplant(RBNode<S>* x, RBNode<S>* y) {
+        if (x->parent == NIL) {
+        root = y;
+        } else if (x == x->parent->left) {
+        x->parent->left = y;
+        } else {
+        x->parent->right = y;
+        }
+        y->parent = x->parent;
+    }
 
     void fixInsert(RBNode<S>* k) {
         while (k != root && k->parent->color == RED) {
@@ -143,7 +212,55 @@ class DicionarioRBT {
         fixInsert(new_node);
     }
 
-    void remove(RBNode<S>* n, S& x) {
+    void remove(RBNode<S>* n, S& k) {
+    RBNode<S>* z = NIL;
+    RBNode<S>* x, y;
+    while (n != NIL) {
+      if (n->data == x) {
+        z = n;
+      }
+
+      if (n->data <= x) {
+        n = n->right;
+      } else {
+        n = n->left;
+      }
+    }
+
+    if (z == NIL) {
+      std::cout << "Chave inexistente" << std::endl;
+      return;
+    }
+
+    y = z;
+    Color y_original_color = y->color;
+    if (z->left == NIL) {
+      x = z->right;
+      rbTransplant(z, z->right);
+    } else if (z->right == NIL) {
+      x = z->left;
+      rbTransplant(z, z->left);
+    } else {
+      y = minimum(z->right);
+      y_original_color = y->color;
+      x = y->right;
+      if (y->parent == z) {
+        x->parent = y;
+      } else {
+        rbTransplant(y, y->right);
+        y->right = z->right;
+        y->right->parent = y;
+      }
+
+      rbTransplant(z, y);
+      y->left = z->left;
+      y->left->parent = y;
+      y->color = z->color;
+    }
+    delete z;
+    if (y_original_color == BLACK) {
+      fixDelete(x);
+    }
 
     }
 
