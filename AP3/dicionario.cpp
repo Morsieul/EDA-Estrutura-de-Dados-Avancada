@@ -18,7 +18,7 @@ int main() {
     //DicionarioRBT<std::string>* dic_rbt = new DicionarioRBT<std::string>();
 
     //Inincializa a tabela hash por endereçamento exterior
-    //HashTableExterior<std::string, int> dicHashEx;
+    HashTableExterior<std::string, int> dicHashEx;
 
     //Inicializa a tabela hash por endereçamento aberto
     HashTableAberto<std::string, int> dicHashAberto;
@@ -50,7 +50,7 @@ int main() {
 
             // Insere a palavra no dicionario em questao
             //dic_rbt->Insert(palavra_processada);
-            //dicHashEx.Insert(palavra_processada);
+            dicHashEx.Insert(palavra_processada);
             dicHashAberto.Insert(palavra_processada);
         }
     }
@@ -59,7 +59,10 @@ int main() {
 
     // Exibe as palavras inseridas na árvore Rubro-Negra
     //dic_rbt->Show();
-    //dicHashEx.Show();
+    std::cout << "Dicionario usando tabela hash(encadeamento exterior):" << std::endl;
+    dicHashEx.Show();
+    std::cout << std::endl;
+    std::cout << "Dicionario usando tabela hash(endereçamento aberto):" << std::endl;
     dicHashAberto.Show();
 
     // Libera a memória alocada para o dicionário AVL e Rubro-Negro

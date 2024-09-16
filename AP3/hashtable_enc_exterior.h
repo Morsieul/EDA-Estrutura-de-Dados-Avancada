@@ -66,11 +66,9 @@ public:
         V value;
         
         // Se a chave já existir, incrementa o valor associado
-        if (search(key, value)) {
-            add(key, value + 1);  // Incrementa o valor
-        } else {
-            add(key, 1);  // Se não existir, insere com valor inicial 1
-        }
+        if (search(key, value)) add(key, value + 1);  // Incrementa o valor
+        else add(key, 1);  // Se não existir, insere com valor inicial 1
+        
     }   
 
     // Remover um par pela chave

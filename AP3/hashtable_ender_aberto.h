@@ -52,7 +52,7 @@ private:
         // Reinsere os elementos antigos
         for (int i = 0; i < oldCapacity; ++i) {
             if (oldTable[i] && !oldTable[i]->isDeleted) {
-                insert(oldTable[i]->key, oldTable[i]->value);
+                add(oldTable[i]->key, oldTable[i]->value);
             }
         }
     }
@@ -64,10 +64,8 @@ public:
     }
 
     // Inserir um par chave-valor na tabela
-    void insert(const K& key, const V& value) {
-        if (size >= capacity / 2) {
-            rehash(); // Rehash se a tabela estiver pela metade cheia
-        }
+    void add(const K& key, const V& value) {
+        if (size >= capacity / 2)  rehash(); // Rehash se a tabela estiver pela metade cheia
 
         int index = FuncaoHash(key);
         int originalIndex = index;
@@ -88,16 +86,14 @@ public:
         table[index] = HashNode(key, value);
     }
 
-    // Função Insert que incrementa ou insere a chave com valor inicial 1
+    // Função add que incrementa ou insere a chave com valor inicial 1
     void Insert(const K& key) {
         V value;
 
         // Se a chave já existir, incrementa o valor
-        if (search(key, value)) {
-            insert(key, value + 1);
-        } else {
-            insert(key, 1);  // Insere com valor inicial 1
-        }
+        if (search(key, value)) add(key, value + 1);
+        else add(key, 1);  // Insere com valor inicial 1
+        
     }
 
     // Remover um par pela chave
@@ -149,9 +145,7 @@ public:
     void Show() const {
         for (const auto& key : orderedKeys) {
             V value;
-            if (search(key, value)) {
-                std::cout  << key << ": " << "[" << value << "]" << std::endl;
-            }
+            if (search(key, value))  std::cout  << key << ": " << "[" << value << "]" << std::endl;
         }
     }
 
