@@ -146,11 +146,11 @@ public:
     }
 
     // Mostrar o conteúdo da hash table em ordem alfabética das chaves
-    void show() const {
+    void Show() const {
         for (const auto& key : orderedKeys) {
             V value;
             if (search(key, value)) {
-                std::cout << "[" << key << ": " << value << "]" << std::endl;
+                std::cout  << key << ": " << "[" << value << "]" << std::endl;
             }
         }
     }

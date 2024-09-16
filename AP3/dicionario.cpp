@@ -17,7 +17,11 @@ int main() {
     // Inicializa o dicionario com Arvore rubro-negra
     //DicionarioRBT<std::string>* dic_rbt = new DicionarioRBT<std::string>();
 
-    HashTableExterior<std::string, int> dicHashEx;
+    //Inincializa a tabela hash por endereçamento exterior
+    //HashTableExterior<std::string, int> dicHashEx;
+
+    //Inicializa a tabela hash por endereçamento aberto
+    HashTableAberto<std::string, int> dicHashAberto;
 
     // Abre o arquivo
     std::ifstream file("dicionario.txt");
@@ -44,9 +48,10 @@ int main() {
             // Opcional: Remover pontuação residual, exceto hífens
             boost::algorithm::trim_if(palavra_processada, boost::is_any_of("!\"#$%&'()*+,./:;<=>?@[\\]^_`{|}~"));
 
-            // Insere a palavra na árvore Rubro-Negra
+            // Insere a palavra no dicionario em questao
             //dic_rbt->Insert(palavra_processada);
-            dicHashEx.Insert(palavra_processada);
+            //dicHashEx.Insert(palavra_processada);
+            dicHashAberto.Insert(palavra_processada);
         }
     }
 
@@ -54,11 +59,11 @@ int main() {
 
     // Exibe as palavras inseridas na árvore Rubro-Negra
     //dic_rbt->Show();
+    //dicHashEx.Show();
+    dicHashAberto.Show();
 
     // Libera a memória alocada para o dicionário AVL e Rubro-Negro
     //delete dic_avl;
     //delete dic_rbt;
-
-    dicHashEx.Show();
     return 0;
 }
