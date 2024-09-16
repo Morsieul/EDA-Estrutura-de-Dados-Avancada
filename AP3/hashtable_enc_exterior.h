@@ -6,12 +6,11 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <set>
 
-// HashTable por encadeamento exterior com templates
 template <typename K, typename V>
-class HashTable {
+class HashTableExterior {
 private:
-    // Par chave-valor armazenado nas listas
     struct HashNode {
         K key;
         V value;
@@ -24,6 +23,9 @@ private:
     int capacity;
     int size;
 
+    // Conjunto ordenado para manter as chaves em ordem alfabética
+    std::set<K> orderedKeys;
+
     // Função hash para calcular o índice do bucket
     int hashFunction(const K& key) const {
         return std::hash<K>{}(key) % capacity;
@@ -31,17 +33,17 @@ private:
 
 public:
     // Construtor que inicializa a tabela com um determinado número de buckets
-    HashTable(int cap = 10) : capacity(cap), size(0) {
+    HashTableExterior(int cap = 10) : capacity(cap), size(0) {
         table.resize(capacity);
     }
 
     // Destrutor
-    ~HashTable() {
+    ~HashTableExterior() {
         clear();
     }
 
     // Inserir um par chave-valor na tabela
-    void insert(const K& key, const V& value) {
+    void add(const K& key, const V& value) {
         int index = hashFunction(key);
         for (auto& node : table[index]) {
             if (node.key == key) {
@@ -50,8 +52,21 @@ public:
             }
         }
         table[index].emplace_back(key, value); // Insere um novo par
+        orderedKeys.insert(key);
         size++;
     }
+
+    // Função Insert que apenas insere a chave e coloca um valor padrão
+    void Insert(const K& key) {
+        V value;
+        
+        // Se a chave já existir, incrementa o valor associado
+        if (search(key, value)) {
+            add(key, value + 1);  // Incrementa o valor
+        } else {
+            add(key, 1);  // Se não existir, insere com valor inicial 1
+        }
+    }   
 
     // Remover um par pela chave
     void remove(const K& key) {
@@ -60,6 +75,7 @@ public:
         for (auto it = chain.begin(); it != chain.end(); ++it) {
             if (it->key == key) {
                 chain.erase(it);
+                orderedKeys.erase(key); // Remove a chave do conjunto ordenado
                 size--;
                 return;
             }
@@ -83,17 +99,17 @@ public:
         for (auto& chain : table) {
             chain.clear();
         }
+        orderedKeys.clear();
         size = 0;
     }
 
-    // Mostrar o conteúdo da hash table
-    void show() const {
-        for (int i = 0; i < capacity; ++i) {
-            std::cout << "Bucket " << i << ": ";
-            for (const auto& node : table[i]) {
-                std::cout << "[" << node.key << ": " << node.value << "] ";
+    // Mostrar o conteúdo da hash table em ordem alfabética das chaves
+    void Show() const {
+        for (const auto& key : orderedKeys) {
+            V value;
+            if (search(key, value)) {
+                std::cout << key << ": " << "[" <<  value << "]" << std::endl;
             }
-            std::cout << std::endl;
         }
     }
 
