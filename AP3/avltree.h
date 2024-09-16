@@ -2,39 +2,39 @@
 
 #ifndef SET_H
 #define SET_H
-#include "node.h"
 
-template<typename K>
-struct node {
+template<typename T>
+struct AVLNode {
     public:
-    K data;
+    T data;
     int contagem = 1;
     int height;
-    node* left{nullptr};
-    node* right{nullptr};
+    AVLNode<T>* left{nullptr};
+    AVLNode<T>* right{nullptr};
+
 };  
 
 
-template<typename K>
+template<typename T>
 class DicionarioAVL {
     
-    node* root;
+    AVLNode<T>* root;
    
-    int height(node *N){  
+    int height(AVLNode<T>* N){  
     if (N == nullptr) return 0;  
     return N->height;  
     }  
 
-    int getBalance(node *N) {  
+    int getBalance(AVLNode<T>* N) {  
         if (N == nullptr) return 0;  
         return height(N->left) - height(N->right);  
     }  
 
-    bool isEmpty(node * root) {
+    bool isEmpty(AVLNode<T>* root) {
         return root == nullptr;
     }
 
-    void makeEmpty(node*& p) {
+    void makeEmpty(AVLNode<T>*& p) {
         if (p != nullptr) {
             // std::cout << "Cleaning " << p->data << std::endl; 
             makeEmpty(p->left);
@@ -44,27 +44,24 @@ class DicionarioAVL {
         }
     }
 
-    int size(node * p) {
+    int size(AVLNode<T>* p) {
         if (p == nullptr) return 0;
         return 1 + size(p->left) + size(p->right);
     }
 
 
-    bool contains(node * root, const std::string& x) {
-        node* current = root;
+    bool contains(AVLNode<T>* root, const T& x) {
+        AVLNode<T>* current = root;
         while (current != nullptr) {
             if (x == current->data) return true;
-            if (x < current->data) {
-                current = current->left;
-            } else {
-                current = current->right;
-            }
+            if (x < current->data) current = current->left;
+            else current = current->right;
         }
         return false;
     }
 
-    node * newNode(const std::string& x) {
-        node * no = new node();
+    AVLNode<T>* newNode(const T& x) {
+        AVLNode<T>* no = new AVLNode<T>();
         no->data = x;
         no->left = nullptr;
         no->right = nullptr;
@@ -73,22 +70,22 @@ class DicionarioAVL {
         return no;
     }
 
-    node* findMin(node* t){
+    AVLNode<T>* findMin(AVLNode<T>* t){
         if(t == nullptr) return nullptr;
         else if(t->left == nullptr) return t;
         else return findMin(t->left);
     }
 
-    node* findMax(node* t) {
+    AVLNode<T>* findMax(AVLNode<T>* t) {
         if(t == nullptr) return nullptr;
         else if(t->right == nullptr) return t;
         else return findMax(t->right);
     }
 
-    node * singleRightRotation ( node * p ) {
+    AVLNode<T>* singleRightRotation ( AVLNode<T>* p ) {
         if (p == nullptr || p->left == nullptr) return p;
-        node * u = p->left;
-        node * T2 = u->right;
+        AVLNode<T>* u = p->left;
+        AVLNode<T>* T2 = u->right;
 
         // std::cout << "SingRightRotation on " << p->data << std::endl;
 
@@ -101,14 +98,14 @@ class DicionarioAVL {
         return u;
     }
 
-    node * doubleRightRotation(node* p){
+    AVLNode<T>* doubleRightRotation(AVLNode<T>* p){
         p->left = singleLeftRotation(p->left);
         return singleRightRotation(p);
     }
 
-    node * singleLeftRotation ( node * p ) {
-        node* u = p->right;
-        node * T2 = u->left;
+    AVLNode<T>* singleLeftRotation ( AVLNode<T>* p ) {
+        AVLNode<T>* u = p->right;
+        AVLNode<T>* T2 = u->left;
 
         // std::cout << "SingLEFTRotation on " << p->data << std::endl;
         u->left = p;
@@ -118,12 +115,12 @@ class DicionarioAVL {
         return u;
     }
 
-    node * doubleLeftRotation(node * p) {
+    AVLNode<T>* doubleLeftRotation(AVLNode<T>* p) {
         p->right = singleRightRotation(p->right);
         return singleLeftRotation(p);
     }
 
-    node * add ( node *p , const std::string& x ) {
+    AVLNode<T>* add ( AVLNode<T>* p , const T& x ) {
         if (p == nullptr) return newNode(x);
         
         if (x < p->data) {
@@ -152,8 +149,8 @@ class DicionarioAVL {
         return p;
     }
 
-    node * remove(node * p, const std::string& x) {
-        node * temp = nullptr;
+    AVLNode<T>* remove(AVLNode<T>* p, const T& x) {
+        AVLNode<T>* temp = nullptr;
 
         if(p == nullptr) return nullptr;
 
@@ -192,14 +189,14 @@ class DicionarioAVL {
         return p;
     }
 
-    node * search(node * p, const std::string& x) {
+    AVLNode<T>* search(AVLNode<T>* p, const T& x) {
         if( p == nullptr || p->data == x) return p;
         else if( p -> data > x) return search(p->left, x);
         else return search(p->right, x);
     }
 
-    node * successor(node * p, const std::string& x) {
-        node * no = search(p, x);
+    AVLNode<T>* successor(AVLNode<T>* p, const T& x) {
+        AVLNode<T>* no = search(p, x);
         if (no == nullptr) {
             throw std::runtime_error("Node not found");
         }
@@ -208,8 +205,8 @@ class DicionarioAVL {
             return findMin(no->right);
         }
 
-        node * succ = nullptr;
-        node* ancestor = root;
+        AVLNode<T>* succ = nullptr;
+        AVLNode<T>* ancestor = root;
         while (ancestor != no) {
             if (no->data < ancestor->data) {
                 succ = ancestor;
@@ -226,13 +223,13 @@ class DicionarioAVL {
         return succ;
     }
 
-    node * predecessor(node * p, const std::string& x) {
-        node* no = search(p, x);
+    AVLNode<T>* predecessor(AVLNode<T>* p, const T& x) {
+        AVLNode<T>* no = search(p, x);
         if (no == nullptr) throw std::runtime_error("Node not found");
         if (no->left != nullptr)  return findMax(no->left);
         
-        node * pred = nullptr;
-        node * ancestor = root;
+        AVLNode<T>* pred = nullptr;
+        AVLNode<T>* ancestor = root;
         while (ancestor != no) {
             if (no->data > ancestor-> data) {
                 pred = ancestor;
@@ -247,11 +244,11 @@ class DicionarioAVL {
         return pred;
     }
 
-    void inorder(node * p) {
+    void inorder(AVLNode<T>* p) {
 	    if (p != nullptr) {
             inorder(p->left);
             // std::cout << "Visiting node with data: " << p->data << std::endl;
-            std::cout << p->data <<  " [" << p->contagem << "]" << std::endl;
+            std::cout << p->data  << ": " << "[" << p->contagem << "]" << std::endl;
             inorder(p->right);
         } else return;
     }
@@ -264,19 +261,19 @@ public:
         Clear();
     }
 
-    node * Head() {
+    AVLNode<T>* Head() {
         return this->root;
     }
 
-    void Insert(const std::string& x) {
+    void Insert(const T& x) {
         root = add(root, x);
     }
 
-    void Erase(const std::string& x) {
+    void Erase(const T& x) {
         remove(root, x);
     }
 
-    bool Contains(const std::string& x) {
+    bool Contains(const T& x) {
         return contains(root, x);
     }
 
@@ -285,27 +282,27 @@ public:
     }
 
     void Minimum() {
-        node* t = findMin(root);
+        AVLNode<T>* t = findMin(root);
 	    std::cout << t->data << std::endl;
     }
 
     void Maximum() {
-        node* t = findMax(root);
+        AVLNode<T>* t = findMax(root);
 	    std::cout << t->data << std::endl;
     }
 
-    void Successor(const std::string& x) {
+    void Successor(const T& x) {
         try {
-			node * p = successor(root, x);
+			AVLNode<T>* p = successor(root, x);
 			std::cout << p->data << std::endl;
 	    } catch (std::runtime_error e) {
 			std::cout << e.what() << std::endl;
 	    }
     }
 
-    void Predecessor( const std::string& x) {
+    void Predecessor( const T& x) {
         try {
-		node * p = predecessor(root, x);
+		AVLNode<T>* p = predecessor(root, x);
 		std::cout << p->data << std::endl;
         } catch (std::runtime_error e) {
             std::cout << e.what() << std::endl;

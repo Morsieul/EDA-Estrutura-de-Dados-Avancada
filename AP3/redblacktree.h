@@ -268,7 +268,7 @@ class DicionarioRBT {
         if (p != NIL) {
         inorder(p->left);
         // std::cout << "Visiting node with data: " << p->data << std::endl;
-        std::cout << p->data <<  " [" << p->contagem << "]" << std::endl;
+        std::cout << p->data <<  ": [" << p->contagem << "]" << std::endl;
         inorder(p->right);
     } else return;
     }
@@ -292,7 +292,7 @@ class DicionarioRBT {
         if (node != NIL) {  
             deleteTree(node->left);   
             deleteTree(node->right);  
-            std::cout << "Deletando no " <<  node->data << std::endl;
+            //std::cout << "Deletando no " <<  node->data << std::endl;
             delete node;              
         }
     }
