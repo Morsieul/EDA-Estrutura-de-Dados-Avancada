@@ -5,6 +5,9 @@
 #include <boost/tokenizer.hpp>
 #include "avltree.cpp"
 #include "redblacktree.h"
+#include "hashtable_enc_exterior.h"
+#include "hashtable_ender_aberto.h"
+
 
 int main() {
     // Inicializa o dicionário AVL (se ainda for necessário)

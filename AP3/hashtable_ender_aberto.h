@@ -8,7 +8,7 @@
 #include <optional>
 
 template<typename K, typename V>
-class HashTable {
+class HashTableAberto {
 private:
     // Estrutura para armazenar um par chave-valor, junto com um flag de ocupação
     struct HashNode {
@@ -50,7 +50,7 @@ private:
 
 public:
     // Construtor para inicializar a tabela com uma capacidade inicial
-    HashTable(int cap = 10) : capacity(cap), size(0) {
+    HashTableAberto(int cap = 10) : capacity(cap), size(0) {
         table.resize(capacity);
     }
 
