@@ -3,7 +3,7 @@
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
-#include "avltree.cpp"
+#include "avltree.h"
 #include "redblacktree.h"
 #include "hashtable_enc_exterior.h"
 #include "hashtable_ender_aberto.h"
@@ -12,7 +12,7 @@
 int main() {
     
     //Inicializa o dicionario com Arvore AVL
-    //DicionarioAVL* dic_avl = new DicionarioAVL();
+    DicionarioAVL* dic_avl = new DicionarioAVL();
 
     // Inicializa o dicionario com Arvore rubro-negra
     //DicionarioRBT<std::string>* dic_rbt = new DicionarioRBT<std::string>();
@@ -49,13 +49,20 @@ int main() {
             boost::algorithm::trim_if(palavra_processada, boost::is_any_of("!\"#$%&'()*+,./:;<=>?@[\\]^_`{|}~"));
 
             // Insere a palavra no dicionario em questao
+            dic_avl->Insert(palavra_processada);
             //dic_rbt->Insert(palavra_processada);
+            
             dicHashEx.Insert(palavra_processada);
             dicHashAberto.Insert(palavra_processada);
         }
     }
 
     file.close();
+
+    // Exibe as palavras inseridas na árvore AVL
+    std::cout << "Dicionario usando árvore AVL:" << std::endl;
+    dic_avl->Show();
+    std::cout << std::endl;
 
     // Exibe as palavras inseridas na árvore Rubro-Negra
     //dic_rbt->Show();
@@ -66,7 +73,7 @@ int main() {
     dicHashAberto.Show();
 
     // Libera a memória alocada para o dicionário AVL e Rubro-Negro
-    //delete dic_avl;
+    delete dic_avl;
     //delete dic_rbt;
     return 0;
 }
