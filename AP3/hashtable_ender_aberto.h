@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <optional>
+#include <set>
 
 template<typename K, typename V>
 class HashTableAberto {
@@ -24,12 +25,20 @@ private:
     int capacity;
     int size;
 
-    // Função hash primária
-    int hashFunction(const K& key) const {
-        return std::hash<K>{}(key) % capacity;
+    // Conjunto para manter as chaves ordenadas
+    std::set<K> orderedKeys;
+
+    // Função hash usando a adiçao de primos
+    int FuncaoHash(const K& key) const {
+        int hash = 7;
+        int prime = 31;  // Um número primo
+        for (auto c : key) {
+            hash = (hash * prime + c) % capacity;
+        }
+        return hash;
     }
 
-    // Rehashing - aumenta o tamanho da tabela e reinserir elementos
+    // Rehashing - aumenta o tamanho da tabela e reinsere elementos
     void rehash() {
         int oldCapacity = capacity;
         capacity *= 2; // Dobra a capacidade
@@ -60,7 +69,7 @@ public:
             rehash(); // Rehash se a tabela estiver pela metade cheia
         }
 
-        int index = hashFunction(key);
+        int index = FuncaoHash(key);
         int originalIndex = index;
         int i = 0;
 
@@ -69,8 +78,9 @@ public:
             index = (originalIndex + ++i) % capacity;
         }
 
-        // Se for uma nova inserção, aumenta o tamanho
+        // Se for uma nova inserção, aumenta o tamanho e adiciona à lista ordenada
         if (!table[index] || table[index]->isDeleted) {
+            orderedKeys.insert(key);
             size++;
         }
 
@@ -78,9 +88,21 @@ public:
         table[index] = HashNode(key, value);
     }
 
+    // Função Insert que incrementa ou insere a chave com valor inicial 1
+    void Insert(const K& key) {
+        V value;
+
+        // Se a chave já existir, incrementa o valor
+        if (search(key, value)) {
+            insert(key, value + 1);
+        } else {
+            insert(key, 1);  // Insere com valor inicial 1
+        }
+    }
+
     // Remover um par pela chave
     void remove(const K& key) {
-        int index = hashFunction(key);
+        int index = FuncaoHash(key);
         int originalIndex = index;
         int i = 0;
 
@@ -91,13 +113,14 @@ public:
 
         if (table[index] && !table[index]->isDeleted) {
             table[index]->isDeleted = true;
+            orderedKeys.erase(key); // Remove a chave do conjunto ordenado
             size--;
         }
     }
 
     // Buscar um valor pela chave
     bool search(const K& key, V& value) const {
-        int index = hashFunction(key);
+        int index = FuncaoHash(key);
         int originalIndex = index;
         int i = 0;
 
@@ -118,16 +141,16 @@ public:
     void clear() {
         table.clear();
         table.resize(capacity);
+        orderedKeys.clear();
         size = 0;
     }
 
-    // Mostrar o conteúdo da hash table
+    // Mostrar o conteúdo da hash table em ordem alfabética das chaves
     void show() const {
-        for (int i = 0; i < capacity; ++i) {
-            if (table[i] && !table[i]->isDeleted) {
-                std::cout << "Bucket " << i << ": [" << table[i]->key << ": " << table[i]->value << "]" << std::endl;
-            } else {
-                std::cout << "Bucket " << i << ": [vazio]" << std::endl;
+        for (const auto& key : orderedKeys) {
+            V value;
+            if (search(key, value)) {
+                std::cout << "[" << key << ": " << value << "]" << std::endl;
             }
         }
     }
