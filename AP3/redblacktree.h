@@ -277,13 +277,25 @@ class DicionarioRBT {
     public:
 
     DicionarioRBT() {
-        NIL = new RBNode<S>(S()); // Inicializa NIL com um valor padrão de S
+        NIL = new RBNode<S>(S()); 
         NIL->color = BLACK;
         NIL->left = NIL->right = NIL;
         root = NIL;
     }
 
-    ~DicionarioRBT() {}
+    ~DicionarioRBT() {
+        deleteTree(root);  
+        delete NIL;        
+    }
+
+    void deleteTree(RBNode<S>* node) {
+        if (node != NIL) {  
+            deleteTree(node->left);   
+            deleteTree(node->right);  
+            std::cout << "Deletando no " <<  node->data << std::endl;
+            delete node;              
+        }
+    }
     
     void Search(S& x) {
         buscar(root, x);
