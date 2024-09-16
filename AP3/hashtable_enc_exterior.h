@@ -18,7 +18,7 @@ private:
         HashNode(K k, V v) : key(k), value(v) {}
     };
 
-    // Vetor de listas (cada lista representa um "bucket")
+    
     std::vector<std::list<HashNode>> table;
     int capacity;
     int size;
@@ -26,14 +26,19 @@ private:
     // Conjunto ordenado para manter as chaves em ordem alfabética
     std::set<K> orderedKeys;
 
-    // Função hash para calcular o índice do bucket
-    int hashFunction(const K& key) const {
-        return std::hash<K>{}(key) % capacity;
+    // Função hash usando a adiçao de primos
+    int FuncaoHash(const K& key) const {
+        int hash = 7;
+        int prime = 31;  // Um número primo
+        for (auto c : key) {
+            hash = (hash * prime + c) % capacity;
+        }
+        return hash;
     }
 
 public:
-    // Construtor que inicializa a tabela com um determinado número de buckets
-    HashTableExterior(int cap = 10) : capacity(cap), size(0) {
+
+    HashTableExterior(int cap = 100) : capacity(cap), size(0) {
         table.resize(capacity);
     }
 
@@ -44,7 +49,7 @@ public:
 
     // Inserir um par chave-valor na tabela
     void add(const K& key, const V& value) {
-        int index = hashFunction(key);
+        int index = FuncaoHash(key);
         for (auto& node : table[index]) {
             if (node.key == key) {
                 node.value = value; // Atualiza o valor se a chave já existir
@@ -70,7 +75,7 @@ public:
 
     // Remover um par pela chave
     void remove(const K& key) {
-        int index = hashFunction(key);
+        int index = FuncaoHash(key);
         auto& chain = table[index];
         for (auto it = chain.begin(); it != chain.end(); ++it) {
             if (it->key == key) {
@@ -84,7 +89,7 @@ public:
 
     // Buscar um valor pela chave
     bool search(const K& key, V& value) const {
-        int index = hashFunction(key);
+        int index = FuncaoHash(key);
         for (const auto& node : table[index]) {
             if (node.key == key) {
                 value = node.value;

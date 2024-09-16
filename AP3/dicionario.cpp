@@ -11,9 +11,10 @@
 
 int main() {
     
+    //Inicializa o dicionario com Arvore AVL
     //DicionarioAVL* dic_avl = new DicionarioAVL();
 
-    // Inicializa o dicionário Rubro-Negro para strings
+    // Inicializa o dicionario com Arvore rubro-negra
     //DicionarioRBT<std::string>* dic_rbt = new DicionarioRBT<std::string>();
 
     HashTableExterior<std::string, int> dicHashEx;
