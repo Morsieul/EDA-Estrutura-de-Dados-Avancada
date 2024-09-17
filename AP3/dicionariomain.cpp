@@ -3,7 +3,7 @@
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
-#include <chrono> // Para medir o tempo
+#include <chrono>
 #include "avltree.h"
 #include "redblacktree.h"
 #include "hashtable_enc_exterior.h"
