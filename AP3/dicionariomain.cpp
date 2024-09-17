@@ -27,7 +27,7 @@ void processarArquivo(Dictionary& dicionario, const std::string& nome_arquivo) {
         for (const auto& palavra : tokens) {
             std::string palavra_processada = palavra;
             boost::algorithm::to_lower(palavra_processada);
-            boost::algorithm::trim_if(palavra_processada, boost::is_any_of("!\"#$%&'()*+,./:;<=>?@[\\]^_`{|}~"));
+            boost::algorithm::trim_if(palavra_processada, boost::is_any_of("!\"#$%&'()*+,./:;<=>?@[\\]^_`{|}~—"));
             dicionario.Insert(palavra_processada);
         }
     }
