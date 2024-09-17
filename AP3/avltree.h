@@ -3,6 +3,20 @@
 #ifndef SET_H
 #define SET_H
 
+/*
+Inicialmente foi tentado usar um mesmo template para todas as estuturas, com uma mesma letra K para o typename, porem foi percebido durante a compilaçao
+que tal abordagem gerava problemas, pois isto era visto como uma redefiniçao das variaveis. Assim, para cada implementaçao da estrutura de dados foi utilizado um template
+com uma letra diferente para evitar confusoes.
+*/
+
+/*
+Para a implementaçao da arvore, usamos o no e a arvore em si, com o mesmo tipo de dado generico T para nao haver problemas.
+Na main() quando e declarado que criaremos uma arvore AVL de tipo string, automaticamente o tipo do AVLNode ja e determinado, ja que no construtor temos que o root
+'e um ponteiro de um AVLNode tipo T.
+A classe dicionario em si, apenas possui a raiz e toda a construçao decorre apartir disto, uma vez que funçoes como size() calculam o resultado percorrendo nos
+AVLNode nos quais guardam as informaçoes relevantes para manter o balanceamento como altura e navegaçao, filho esquerdo e direito. 
+*/
+
 template<typename T>
 struct AVLNode {
     public:
@@ -25,6 +39,13 @@ class DicionarioAVL {
     return N->height;  
     }  
 
+    /*
+    O balanço e calculado a partir da altura dos dois filhos de um no. 
+    Ele e essencial, pois a partir se seu valor for maior que 1 signifca que a arvore esta desbalanceada,
+    sendo preciso aplicar rotaçao para manter a propriedade da arvore AVL, onde cada no tem altura menor ou igual a 1
+    e fazer com que o tempo de busca nessa estrutura seja de Log(n).
+    */
+
     int getBalance(AVLNode<T>* N) {  
         if (N == nullptr) return 0;  
         return height(N->left) - height(N->right);  
@@ -34,6 +55,11 @@ class DicionarioAVL {
         return root == nullptr;
     }
 
+    /*
+    Esvazia uma arvore apartir de um no, de forma recursiva, verifica se o no em questao e 
+    um nullptr para evitar problemas de segmentation fault.
+    Funçao auxiliar da de chamada publica Clear(), essencial para o destrutor da estrutura de dados.
+    */
     void makeEmpty(AVLNode<T>*& p) {
         if (p != nullptr) {
             // std::cout << "Cleaning " << p->data << std::endl; 
@@ -60,6 +86,11 @@ class DicionarioAVL {
         return false;
     }
 
+    /*
+    Essencial quando estiver usando template declarar que estamos usando o tipo dado no typename, do contrario isso acarreta
+    erros de compilaçao.
+    */
+
     AVLNode<T>* newNode(const T& x) {
         AVLNode<T>* no = new AVLNode<T>();
         no->data = x;
@@ -70,6 +101,14 @@ class DicionarioAVL {
         return no;
     }
 
+    /*
+    As funçoes de finMin e findMax percorrem a arvore recursivamente, pela esquerda para encotrar
+    o menor valor e pela direita para encontrar o maior valor. Isso deve por conta dos principios
+    de uma arvore binaria de busca, onde o maior elemento de um no se encontra a direita e o menor
+    se encontra a esquerda. Essa busca se encerra ate encontrar um no filho que seja nulo, o que
+    indica que nao e possivel explorar mais da arvore por falta de filhos e portanto tem-se o valor
+    procurado, principio semelhante e usado na funçao search() de busca.  
+    */
     AVLNode<T>* findMin(AVLNode<T>* t){
         if(t == nullptr) return nullptr;
         else if(t->left == nullptr) return t;
@@ -82,6 +121,13 @@ class DicionarioAVL {
         else return findMax(t->right);
     }
 
+    /*
+    A rotaçao simples a direita e feita quando, foi adicionada um no
+    da sub-arvore esquerda de uma sub-arvore esquerda. 
+
+    Uma forma ludica de ver isso e imaginar uma seta saindo de um no A e percorrer uma
+    reta passando por outros dois nos, todos a esquerda de A.
+    */
     AVLNode<T>* singleRightRotation ( AVLNode<T>* p ) {
         if (p == nullptr || p->left == nullptr) return p;
         AVLNode<T>* u = p->left;
@@ -98,10 +144,22 @@ class DicionarioAVL {
         return u;
     }
 
+    /*
+    A rotaçao dupla a direita ou rotaçao Esquerda-Direita ocorre quando na sub-arvore direita 
+    de uma sub-arvore esquerda ha um no. 
+
+    Imaginando o exemplo da reta saindo de A no item anterior, e como se tivessemos agora 
+    um V e nao uma reta.
+    */
     AVLNode<T>* doubleRightRotation(AVLNode<T>* p){
         p->left = singleLeftRotation(p->left);
         return singleRightRotation(p);
     }
+
+    /*
+    Ocorre quando a partir de um No A ha uma sequencia de nos na sub-arvore direita de uma sub-arvore direita.
+    Tambem formando uma reta.
+    */
 
     AVLNode<T>* singleLeftRotation ( AVLNode<T>* p ) {
         AVLNode<T>* u = p->right;
@@ -115,11 +173,41 @@ class DicionarioAVL {
         return u;
     }
 
+    /*
+    Tambem chamada de rotaçao Direita-Esquerda, corre quando na sub-arvore direita 
+    de uma sub-arvore esquerda ha um no
+    */
     AVLNode<T>* doubleLeftRotation(AVLNode<T>* p) {
         p->right = singleRightRotation(p->right);
         return singleLeftRotation(p);
     }
 
+    /*
+    E adicionado um novo item x, do tipo T, em uma arvore representada pelo No.
+    Se o no for nullptr, significa que a arvore esta vazia naquele ponto e se cria um
+    novo no do tipo com o valor de x.
+
+    Caso contrario percorre pela esquerda ou a direita a partir da comparaçao com o valor de 
+    p->data, ate que se chegue em um no vazio que possa acomodar x.
+
+    No caso do dicionario, como poderiam ocorrer palavras iguais, o contator de recorrencias
+    incrementa no no que possuir x, caso este ja exista e tente se colocar um novo no.
+
+    Com o no em posiçao, calcula-se o balanço, a partir do resultado do balanço e da 
+    verificaçao sobre onde termina a arvore p e a comparaçao dos filhos de p com x, sera decidido qual rotaçao sera utilizada.
+
+    Se o balanço for positivo, a esquerda de p estiver ocupada e x e menor que a esquerda de p, significa
+    que estamos fazendo um  percurso de sub-arvore esquerda da sub-arvore esquerda, assim utiliza-se rotaçao simples a direita.
+
+    Se o balanço for negativo, a direita de p estiver ocupada e x for maior que a direita de p, significa que 
+    estamos lidando com um percurso de sub-arvore direita da sub-arvore direita, assim utiliza-se a rotaçao simples a esquerda.
+
+    Se o balanço for positivo, a esquerda de p estiver ocupada e x e for maior que a esquerda de p, significa
+    que estamos fazendo um  percurso de sub-arvore direita da sub-arvore esquerda, assim utiliza-se rotaçao dupla a direita.
+
+    Se o balanço for negativo, a direita de p estiver ocupada e x e for menor que a direita de p, significa
+    que estamos fazendo um  percurso de sub-arvore esquerda da sub-arvore direita, assim utiliza-se rotaçao dupla a esquerda.
+    */
     AVLNode<T>* add ( AVLNode<T>* p , const T& x ) {
         if (p == nullptr) return newNode(x);
         
@@ -148,6 +236,16 @@ class DicionarioAVL {
 
         return p;
     }
+
+    /*
+    Remoçao faz uma busca por x na arvore em questao, a partir do no p. 
+    Se o elemento for encontrado e este tiver dois filhos, sera preciso determinar qual e o menor
+    para ser colocado no lugar de x, tornando-o no novo pai e o maior ficara a sua direita. 
+    Caso tenha apenas um filho, este assume o lugar do pai.
+
+    Apos isso verifica-se o balanço a partir da altura das sub-arvores e por fim, faz-se o balancemento 
+    usando as devidas rotaçoes se for preciso.
+    */
 
     AVLNode<T>* remove(AVLNode<T>* p, const T& x) {
         AVLNode<T>* temp = nullptr;
@@ -244,6 +342,10 @@ class DicionarioAVL {
         return pred;
     }
 
+    /*
+    Percurso simples em ordem de uma arvore binaria de busca.
+    */
+
     void inorder(AVLNode<T>* p) {
 	    if (p != nullptr) {
             inorder(p->left);
@@ -254,6 +356,8 @@ class DicionarioAVL {
     }
 
 public:
+
+    //Funçoes de chamada publica, servem para interagir com  o dicionario fora da classe.
 
     DicionarioAVL() : root(nullptr) {}
 
