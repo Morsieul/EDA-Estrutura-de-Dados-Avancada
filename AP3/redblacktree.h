@@ -41,6 +41,27 @@ class DicionarioRBT {
         else return buscar(p->right, x);
     }
 
+    /*
+    O fixDelete é auxiliar da função de remoção, ela cuida principalmente de preservar o balanço de nós pretos após
+    a perda de um nó.
+
+    O while percorre a árvore de forma iterativa enquanto x for preto e não ser a raíz. Estamos em dois casos gerais onde
+    cada um possui seus sub-casos, são eles:
+    1. x é o filho esquerdo de seu pai.
+    1.1 Seu irmão(s) é vermelho. Para resolver esse empasse, s é recolorido para preto, x para vermelho e executa-se
+    uma rotação à esquerda do pai de x.
+    1.2 x, s e os filhos de s são todos pretos. s é colorido de vermelho e x recebe o valor de seu pai, o laço continua até
+    resolver o problema.
+    1.3 O irmão de x tem um filho esquerdo vermelho e um direito preto. Faz-se uma rotação à direita de s. Recolore s e seus filhos.
+    1.4 O filho direito do irmão de x é vermelho. s é recolorido para a mesma cor do pai de x, este por sua vez é colorido de preto.
+    O filho direito de s é colorido de preto. Ocorre uma rotação à esquerda no pai de x e x se torna a raíz, saindo do laço.
+    2. x é o filho direito. 
+    2.1 O irmão de x é vermelho, faz-se uma rotação à direita do pai de x.
+    2.2 Se s(irmão de x) e ambos os seus filhos forem pretos, ele é colorido de vermelho e joga o problema para o nível superior.
+    2.3 Se o filho direito de s for preto, faz uma rotação à esquerda em s, ele e seus filhos são recoloridos.
+    2.4 Se o filho esquerdo de s for vermelho, a cor de s é reajustada para a mesma da do pai de x. O pai de x é colorido de preto
+    o filho esquerdo de s é colorido de preto. Por fim, faz uma rotação à direita de x.
+    */
     void fixDelete(RBNode<S>* x) {
         RBNode<S>* s;
         while (x != root && x->color == BLACK) {
@@ -116,12 +137,25 @@ class DicionarioRBT {
     }
 
     /*
-     
+     A cor do nó k recém inserido é RED, pois esta é a cor padrão para todo novo nó inserido na árvore. Porém uma das propriedades 
+     das árvores rubro-negras é justamente que um nó vermelho não pode ter como filho outro nó vermelho, em outras palavras não pode haver
+     nós vermelhos consecutivos. 
+
+     Para isso, o código de forma iterativa "joga" o problema para cima, verificando se o pai do nó que está vendo é vermelho ou não,
+     até encontrar uma situação que possa resolver o problema. Para resolver o problema há três casos que buscamos encontrar:
+
+    1.1 Tio Vermelho: u = k->parent->parent->right. Esse caso indica que existem dois nós vermelhos consecutivos, assim o tio e o pai de k
+    são recoloridos como pretos. 
+    O avô de k é colorido como vermelho e k assume o valor do avô para continuar verificando se o problema persiste mais acima da árvore. 
+    1.2 Tio Preto. Se k for o filho direito de seu pai, faz uma rotação à esquerda, transformando em um caso linear que pode ser resolvido com
+    uma única rotação. Assim o pai de k é colorido de preto e seu avô de vermelho, por fim para rebalancear é feita uma rotação à direita do avô.
+    2. O pai de k é o filho direito do avô de k. Os sub-casos são espelhados dos dois primeiros sub-casos.
+    Se o tio for vermelho, ajusta-se como no caso 1.1 e se o tio for preto ajusta-se por meio de rotações como no caso 1.2.
     */
     void fixInsert(RBNode<S>* k) {
         while (k != root && k->parent->color == RED) {
             if (k->parent == k->parent->parent->left) {
-               RBNode<S>* u = k->parent->parent->right; // uncle
+               RBNode<S>* u = k->parent->parent->right; // tio
                 if (u->color == RED) {
                     k->parent->color = BLACK;
                     u->color = BLACK;
@@ -139,7 +173,7 @@ class DicionarioRBT {
                 }
             }
             else {
-                RBNode<S>* u = k->parent->parent->left; // uncle
+                RBNode<S>* u = k->parent->parent->left; // tio
                 if (u->color == RED) {
                     k->parent->color = BLACK;
                     u->color = BLACK;
@@ -194,7 +228,7 @@ class DicionarioRBT {
     nó x, caso já exista um nó com os mesmos dados(caso de palavra repetida no contexto do dicionário) irá incrementar o parâmetrp de contagem.
     Após isso é feito ajustes como colocar a cor do novo nó, pintando-o de preto se seu pai for NIL. 
 
-    Para manter a propriedade da altura negra que garanta a busca em termos de Log(n), é chamada a função fixInsert(), responsável por refazer o rebalanceamento e
+    Para manter a propriedade da altura negra que garanta a busca em termos de O(log n), é chamada a função fixInsert(), responsável por refazer o rebalanceamento e
     recolorir nós se necessário, partindo do novo nó adicionado e sua posição na árvore.
     */
     void add(RBNode<S>* n, S& x) {
