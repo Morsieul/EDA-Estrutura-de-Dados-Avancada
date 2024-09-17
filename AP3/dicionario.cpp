@@ -10,10 +10,6 @@
 
 
 int main() {
-    
-    //Inicializa o dicionario com Arvore AVL
-    DicionarioAVL<std::string>* dic_avl = new DicionarioAVL<std::string>();
-
     // Inicializa o dicionario com Arvore rubro-negra
     DicionarioRBT<std::string>* dic_rbt = new DicionarioRBT<std::string>();
 
