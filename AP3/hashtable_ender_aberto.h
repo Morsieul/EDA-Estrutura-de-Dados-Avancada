@@ -102,7 +102,6 @@ public:
         int originalIndex = index;
         int i = 0;
 
-        // Probing linear para encontrar o elemento
         while (table[index] && (table[index]->key != key || table[index]->isDeleted)) {
             index = (originalIndex + ++i) % capacity;
         }

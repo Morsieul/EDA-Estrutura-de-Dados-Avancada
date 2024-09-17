@@ -288,15 +288,9 @@ class DicionarioRBT {
     RBNode<S>* z = NIL;
     RBNode<S>* x, y;
     while (n != NIL) {
-      if (n->data == k) {
-        z = n;
-      }
-
-      if (n->data <= k) {
-        n = n->right;
-      } else {
-        n = n->left;
-      }
+        if (n->data == k) z = n;
+        if (n->data <= k) n = n->right;
+        else  n = n->left;
     }
 
     if (z == NIL) {
@@ -368,12 +362,11 @@ class DicionarioRBT {
             delete node;              
         }
     }
-
-    /*
+    
     RBNode<S>* Head() {
     return root;
     }
-    */
+    
     
     void Search(S& x) {
         buscar(root, x);
