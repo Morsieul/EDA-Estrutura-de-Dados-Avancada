@@ -4,7 +4,9 @@
 #define REDBLACK_H
 
 enum Color { RED, BLACK };
-
+/*
+Como já explicado nos comentários da árvore AVL aqui seguiu-se a mesma problemática e foi decidido adotar a letra S para o template.
+*/
 template<typename S>
 struct RBNode {
     public:
@@ -19,11 +21,18 @@ struct RBNode {
     
     RBNode(S val) : data(val), color(RED), parent(nullptr), left(nullptr), right(nullptr) {}
 };
-
+/*
+O NIL esta sendo impelementado como um ponteiro de um nó especial, através da inicialização do RBNode, seus valores para pai e filhos
+são inicializados com nullptr. Como o NIL precisa ser um nó preto, alocamos essa cor posteriormente.
+Como na árvore AVL, possui-se métodos públicos nesta implementação que serão usados para acessar e modificar a classe DicionarioRBT, os métodos privados
+servem como funções auxiliares que farão o trabalho duro de computar o que for necessário.
+*/
 template<typename S>
 class DicionarioRBT {
     RBNode<S>* root;
     RBNode<S>* NIL;
+
+    //NIL->color = BLACK
 
     RBNode<S>* buscar(RBNode<S>* p, S& x) {
         if( p == NIL || p->data == x) return p;
@@ -92,6 +101,9 @@ class DicionarioRBT {
         x->color = BLACK;
     }
 
+    /*
+    Equivalente a um swap(), troca os elementos de um no x por um no y, a partir de seus ponteiros.
+    */
     void rbTransplant(RBNode<S>* x, RBNode<S>* y) {
         if (x->parent == NIL) {
         root = y;
@@ -103,6 +115,9 @@ class DicionarioRBT {
         y->parent = x->parent;
     }
 
+    /*
+     
+    */
     void fixInsert(RBNode<S>* k) {
         while (k != root && k->parent->color == RED) {
             if (k->parent == k->parent->parent->left) {
@@ -169,6 +184,19 @@ class DicionarioRBT {
         x->parent = y;
     }
 
+    /*
+    A  função add() funciona como auxiliar do método público Insert(K). Aqui, cria-se um novo nó com o valor x passado.
+    Como não sabemos se ele terá filhos ou não, seus valores serão inicializados com NIL. O pai do novo nó x também 
+    se inicializa em NIL.
+
+    Para determinarmos a posição onde o novo nó deve ser posicionado, precisamos percorrer iterativamente a árvore a partir do nosso nó de entrada n.
+    Percorre-se a árvore da maneira esperada para uma BST. Atualiza-se o valor de parent e current até achar a melhor posição para encaixar o novo
+    nó x, caso já exista um nó com os mesmos dados(caso de palavra repetida no contexto do dicionário) irá incrementar o parâmetrp de contagem.
+    Após isso é feito ajustes como colocar a cor do novo nó, pintando-o de preto se seu pai for NIL. 
+
+    Para manter a propriedade da altura negra que garanta a busca em termos de Log(n), é chamada a função fixInsert(), responsável por refazer o rebalanceamento e
+    recolorir nós se necessário, partindo do novo nó adicionado e sua posição na árvore.
+    */
     void add(RBNode<S>* n, S& x) {
         RBNode<S>* new_node = new RBNode<S>(x);
         new_node->left = NIL;
@@ -212,15 +240,25 @@ class DicionarioRBT {
         fixInsert(new_node);
     }
 
+    /*
+    A função remove() auxilia a Remove() que é pública.
+    Inicialmente, compara-se os valores com k enquanto n for diferente de NIL, achando o valor, este é colocado ao lado adequado de n.
+    x, y e z são variáveis auxiliares responsáveis por preservar os valores dos nós e suas posições para as operações seguintes ao longo 
+    da árvore. 
+
+    Se o final de tudo, y tiver sido originalmente preto, significa que é preciso rebalancear e recolorir a árvore rubro-negra para manter
+    a altura e as devidas propriedades.
+    */
+
     void remove(RBNode<S>* n, S& k) {
     RBNode<S>* z = NIL;
     RBNode<S>* x, y;
     while (n != NIL) {
-      if (n->data == x) {
+      if (n->data == k) {
         z = n;
       }
 
-      if (n->data <= x) {
+      if (n->data <= k) {
         n = n->right;
       } else {
         n = n->left;
@@ -241,27 +279,27 @@ class DicionarioRBT {
       x = z->left;
       rbTransplant(z, z->left);
     } else {
-      y = minimum(z->right);
-      y_original_color = y->color;
-      x = y->right;
-      if (y->parent == z) {
-        x->parent = y;
-      } else {
-        rbTransplant(y, y->right);
-        y->right = z->right;
-        y->right->parent = y;
-      }
-
-      rbTransplant(z, y);
-      y->left = z->left;
-      y->left->parent = y;
-      y->color = z->color;
-    }
-    delete z;
-    if (y_original_color == BLACK) {
-      fixDelete(x);
-    }
-
+          y = minimum(z->right);
+          y_original_color = y->color;
+          x = y->right;
+          if (y->parent == z) {
+            x->parent = y;
+          } else {
+            rbTransplant(y, y->right);
+            y->right = z->right;
+            y->right->parent = y;
+          }
+    
+          rbTransplant(z, y);
+          y->left = z->left;
+          y->left->parent = y;
+          y->color = z->color;
+        }
+            
+        delete z;
+            
+        if (y_original_color == BLACK) fixDelete(x);
+    
     }
 
     void inorder(RBNode<S>* p) {
@@ -296,6 +334,12 @@ class DicionarioRBT {
             delete node;              
         }
     }
+
+    /*
+    RBNode<S>* Head() {
+    return root;
+    }
+    */
     
     void Search(S& x) {
         buscar(root, x);
