@@ -8,6 +8,16 @@
 #include <optional>
 #include <set>
 
+/*
+Nessa hash table não será usado um vetor de listas de nós, mas apenas um vetor.
+A tabela hash por endereçamento ainda procura manter a velocidade de acesso bem elevada,
+para esta finalizade será calculado a posição com a função hash e caso exista uma colisão 
+e dependendo de fatores como se mais da tabela já estiver cheia, pode haver o rehash,
+que faz com que aumenta o tamanho da tabela como um todo e então seja reenserido os valores.
+Ou seja, a principal diferença entre as tabelas é que uma temos que percorrer uma lista dentro de 
+um vetor para casos de colisão, enquanto na endereçamento aberto se necessário o vetor aumenta de tamanho
+para acomodar todos os nós.
+*/
 template<typename K, typename V>
 class HashTableAberto {
 private:
