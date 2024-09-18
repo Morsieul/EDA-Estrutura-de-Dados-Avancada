@@ -8,6 +8,20 @@
 #include <vector>
 #include <set>
 
+/*
+A aplicação da tabela hash se dá por meio de um vetor de listas. Dos quais os vetores tem um determinado
+número de posições a serem ocupadas. Na tabela hash é calculado o valor e sua chave de acesso.
+A ideia é que com determinada valor, calcula-se a posição que este deve ocupar na tabela e o acesso 
+para o elemento se torna muito rápido. já que sua posição no vetor será determinística.
+
+Porém, caso hajam muitas chaves em comparação aos espaços se faz preciso tratar das colisões. Por esse
+motivo, usamos a lista, caso dois elementos possuam a mesma posição no vetor eles se juntarão em uma lista nessa
+posição do vetor. Contudo, o ideal é que o número de colisões seja o menor possível para evitar que se percorra uma lista muito longa
+e a propriedade de O(1) seja perdida. Para isso são usadas outros subterfúgios, como funções hash que evitem essas colisões.
+Uma forma de avaliar se a função hash está fazendo um bom trabalho evitando colisões é verificando o fator de carga. 
+Se o tamanho de dada tabela dividido por sua capacida for maior que o fator de carga então haverá muitas colisões e será preciso 
+aumentar o tamnho das coisas.
+*/
 template <typename K, typename V>
 class HashTableExterior {
 private:
@@ -23,7 +37,13 @@ private:
     float loadFactorThreshold; // Fator de carga máximo
 
     std::set<K> orderedKeys;
+    /*
+    A função hash utiliza a multiplicação de dois primos, para fazer com que quando seja calculado o módulo 
+    uma duas chaves diferentes caiam na mesma posição, isso se deve ao fato de números primos só serem divisíveis por
+    um e si mesmos.
 
+    Essa função rece como entrada a chave e produz seu posicionamento na tabela hash, permitindo sua busca e acesso.
+    */
     int FuncaoHash(const K& key) const {
         int hash = 7;
         int prime = 31;
